@@ -3,13 +3,15 @@
 
 #include <iostream>
 #include <string>
+#include "labUnions.h"
 using namespace std;
 
+
 struct ipAddress {
-    unsigned int byteOne : 8;
-    unsigned int byteTwo : 8;
-    unsigned int byteThree : 8;
     unsigned int byteFour : 8;
+    unsigned int byteThree : 8;
+    unsigned int byteTwo : 8;
+    unsigned int byteOne : 8;
 };
 
 union wholeAddress {
@@ -17,62 +19,79 @@ union wholeAddress {
     unsigned int whole : 32;
 };
 
+
 void four(wholeAddress a) {
     cout << "Which bit would you like to see?";
     int y;
     cin >> y;
 
+    unsigned int result;
 
     if (y > 32 || y < 0) {
         cout << "Enter a number between 1 and 32";
         four(a);
     }
 
-    unsigned int mask = 1 ;
-    unsigned int result = (a.whole >> (32 - y)) & mask;
+    result = (a.whole << (32 - y)) >> (31);
 
-    cout << result;
+    cout << result << "\n";
+
 }
 
 void three(wholeAddress a) {
 
-    cout << "How many bits in the network address?";
     int y;
+
+    cout << "How many bits in the network address?";
     cin >> y;
 
+    unsigned int result = 0;
 
     if (y > 32 || y < 0) {
         cout << "Enter a number between 1 and 32";
         three(a);
     }
 
-    unsigned int highMask = (1 << y) - 1;
+    unsigned int firstHalf = a.whole;
+    unsigned int secondHalf = a.whole;
+    
+    firstHalf = firstHalf << y;
+    firstHalf = firstHalf >> y;
+
+    secondHalf = secondHalf >> y;
+
+    cout << secondHalf << ", " << firstHalf << "\n";
+
+
+    /*unsigned int highMask = (1 << y) - 1;
     unsigned int lowMask = ~highMask;
 
     unsigned int high = (a.whole & highMask);
     unsigned int low = (a.whole & lowMask) << y;
 
-    cout << high << ", " << low;
+    cout << high << ", " << low;*/
+
 }
 
-int main()
-{
-    
+
+
+int main() {
+
     int input1;
     int input2;
     int input3;
     int input4;
 
-    cout << "Enter an integer";
+    cout << "Enter an integer: \n";
     cin >> input1;
 
-    cout << "Enter an integer";
+    cout << "Enter an integer: \n";
     cin >> input2;
-    
-    cout << "Enter an integer";
+
+    cout << "Enter an integer: \n";
     cin >> input3;
 
-    cout << "Enter an integer";
+    cout << "Enter an integer: \n";
     cin >> input4;
 
     wholeAddress a;
@@ -102,6 +121,7 @@ int main()
         four(a);
         break;
     }
+    
 }
 
 struct birth_date {
@@ -120,7 +140,7 @@ struct bday {
 
 union both {
     int one;
-    int two;   
+    int two;
 };
 
 struct halves {
@@ -144,3 +164,5 @@ union all {
 //   4. Use the Error List window to view errors
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
+
